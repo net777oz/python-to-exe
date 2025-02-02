@@ -32,8 +32,10 @@ jobs:
           myenv\Scripts\activate
           pyinstaller --onefile main.py
 
-      - name: Upload EXE as Artifact  # 생성된 .exe 파일을 GitHub에 업로드
-        uses: actions/upload-artifact@v2
+      - name: Upload EXE as Artifact  # 최신 버전(v4)로 변경
+        uses: actions/upload-artifact@v4
         with:
           name: built-exe
           path: dist/main.exe
+
+
