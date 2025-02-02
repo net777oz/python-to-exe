@@ -1,0 +1,29 @@
+name: Test Python Script on Windows
+
+on: [push]  # 코드가 GitHub에 푸시될 때 실행됨
+
+jobs:
+  build:
+    runs-on: windows-latest  # Windows 환경에서 실행됨
+
+    steps:
+      - name: Checkout Repository  # GitHub 저장소에서 코드 다운로드
+        uses: actions/checkout@v2
+
+      - name: Set up Python  # Windows 환경에서 Python 설정
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Create virtual environment  # 가상환경 생성
+        run: python -m venv myenv
+
+      - name: Install dependencies  # 가상환경에서 필요한 라이브러리 설치
+        run: |
+          myenv\Scripts\activate
+          pip install -r requirements.txt
+
+      - name: Run Python script  # Python 코드 실행
+        run: |
+          myenv\Scripts\activate
+          python main.py
