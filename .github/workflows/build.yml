@@ -15,8 +15,8 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Set UTF-8 Encoding  # 인코딩 강제 변경
-        run: chcp 65001
+      - name: Set UTF-8 Encoding  # 환경 변수 설정 (한글 출력 문제 해결)
+        run: echo "PYTHONUTF8=1" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
 
       - name: Create virtual environment
         run: python -m venv myenv
