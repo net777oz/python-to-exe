@@ -1,10 +1,10 @@
-name: Test Python Script on Windows
+name: Build Windows Executable
 
-on: [push]
+on: [push]  # 코드가 GitHub에 푸시될 때 실행됨
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest  # Windows 환경에서 실행됨
 
     steps:
       - name: Checkout Repository
@@ -15,18 +15,25 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Set UTF-8 Encoding  # 환경 변수 설정 (한글 출력 문제 해결)
+      - name: Set UTF-8 Encoding  # Windows에서 한글 출력 깨짐 방지
         run: echo "PYTHONUTF8=1" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
 
-      - name: Create virtual environment
+      - name: Create virtual environment  # 가상환경 생성
         run: python -m venv myenv
 
-      - name: Install dependencies
+      - name: Install dependencies  # 가상환경에서 라이브러리 설치
         run: |
           myenv\Scripts\activate
           pip install -r requirements.txt
+          pip install pyinstaller
 
-      - name: Run Python script
+      - name: Build EXE with PyInstaller  # PyInstaller 실행
         run: |
           myenv\Scripts\activate
-          python main.py
+          pyinstaller --onefile main.py
+
+      - name: Upload EXE as Artifact  # 생성된 .exe 파일을 GitHub에 업로드
+        uses: actions/upload-artifact@v2
+        with:
+          name: built-exe
+          path: dist/main.exe
